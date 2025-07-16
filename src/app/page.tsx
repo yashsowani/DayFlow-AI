@@ -15,13 +15,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 export default function Home() {
   const [tasks, setTasks] = useLocalStorage<Task[]>("tasks", []);
 
-  const handleAddTask = (title: string) => {
+  const handleAddTask = (title: string, dueDate?: Date) => {
     if (title.trim()) {
       const newTask: Task = {
         id: uuidv4(),
         title,
         completed: false,
         priority: "medium",
+        dueDate: dueDate?.toISOString(),
       };
       setTasks((prevTasks) => [...prevTasks, newTask]);
     }
@@ -57,7 +58,7 @@ export default function Home() {
 
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-transparent text-foreground">
       <main className="container mx-auto p-4 md:p-8">
         <header className="flex items-center gap-4 mb-8">
           <Logo />
