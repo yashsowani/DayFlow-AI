@@ -154,7 +154,7 @@ export function TaskItem({
               </DropdownMenuSub>
 
               <PopoverTrigger asChild>
-                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                <DropdownMenuItem onSelect={(e) => { e.preventDefault(); setIsDatePickerOpen(true); }}>
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   <span>Set Due Date</span>
                 </DropdownMenuItem>
