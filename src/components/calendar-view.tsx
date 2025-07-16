@@ -1,6 +1,7 @@
 import * as React from 'react';
 import type { Task } from '@/types';
 import { Calendar } from '@/components/ui/calendar';
+import { cn } from '@/lib/utils';
 
 interface CalendarViewProps {
   tasks: Task[];
@@ -20,25 +21,27 @@ export function CalendarView({ tasks, onDateSelect }: CalendarViewProps) {
   };
 
   return (
-    <Calendar
-      mode="single"
-      selected={selectedDate}
-      onSelect={handleSelect}
-      modifiers={{ taskDays: taskDueDates }}
-      className="rounded-md border"
-      classNames={{
-        month: 'space-y-4 p-3',
-        day_selected:
-          'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground',
-        day_today: "bg-accent text-accent-foreground",
-        "day_today[aria-selected=true]": "bg-primary text-primary-foreground",
-        modifiers: {
+    <div className="flex justify-center">
+        <Calendar
+          mode="single"
+          selected={selectedDate}
+          onSelect={handleSelect}
+          modifiers={{ taskDays: taskDueDates }}
+          className="rounded-md border"
+          classNames={{
+            month: 'space-y-4 p-3',
+            day_selected:
+              'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground',
+            day_today: "bg-accent text-accent-foreground",
+            "day_today[aria-selected=true]": "bg-primary text-primary-foreground",
+            modifiers: {
+                taskDays: 'bg-primary/20 rounded-full'
+            }
+          }}
+          modifiersClassNames={{
             taskDays: 'bg-primary/20 rounded-full'
-        }
-      }}
-      modifiersClassNames={{
-        taskDays: 'bg-primary/20 rounded-full'
-      }}
-    />
+          }}
+        />
+    </div>
   );
 }
