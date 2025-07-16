@@ -1,0 +1,18 @@
+# The name of the backend resource.
+# This can be whatever you want, but it must be unique.
+backend: dayflow-ai-backend
+
+# The region to deploy the backend to.
+# This can be any of the supported regions.
+region: us-central1
+
+# The amount of memory to allocate to the backend.
+# This can be one of the following values: 256Mi, 512Mi, 1Gi, 2Gi, 4Gi, 8Gi.
+memory: 1Gi
+
+# The name of the environment variable that contains the API key for the Google AI API.
+# This is used by the Genkit flows.
+# The value for this variable will be sourced from a secret you create in the next step.
+env:
+  - variable: GOOGLE_API_KEY
+    secret: GOOGLE_API_KEY
