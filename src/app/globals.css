@@ -8,7 +8,7 @@ body {
 
 @layer base {
   :root {
-    --background: 206 27% 95%; /* #F0F4F7 */
+    --background: 206 27% 95% / 0; /* Set to transparent */
     --foreground: 240 10% 3.9%;
     --card: 206 27% 100%;
     --card-foreground: 240 10% 3.9%;
@@ -43,7 +43,7 @@ body {
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
   .dark {
-    --background: 240 10% 3.9%;
+    --background: 240 10% 3.9% / 0; /* Set to transparent */
     --foreground: 0 0% 98%;
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
@@ -83,7 +83,9 @@ body {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
     background-image: linear-gradient(to bottom, #1a1a1a, #000000);
+    background-attachment: fixed;
+    background-size: cover;
   }
 }
