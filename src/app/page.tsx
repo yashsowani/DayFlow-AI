@@ -14,6 +14,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Home() {
   const [tasks, setTasks] = useLocalStorage<Task[]>("tasks", []);
+  const [selectedDate, setSelectedDate] = React.useState<Date | undefined>();
+
 
   const handleAddTask = (title: string, dueDate?: Date) => {
     if (title.trim()) {
@@ -25,6 +27,7 @@ export default function Home() {
         dueDate: dueDate?.toISOString(),
       };
       setTasks((prevTasks) => [...prevTasks, newTask]);
+      setSelectedDate(undefined); // Reset date after adding task
     }
   };
 
@@ -55,6 +58,10 @@ export default function Home() {
   const handleSetDueDate = (id: string, dueDate?: Date) => {
     setTasks(prev => prev.map(task => task.id === id ? {...task, dueDate: dueDate?.toISOString() } : task));
   }
+  
+  const handleDateSelect = (date?: Date) => {
+    setSelectedDate(date);
+  }
 
 
   return (
@@ -77,7 +84,7 @@ export default function Home() {
 
             <Card>
               <CardContent className="p-6">
-                 <AddTaskForm onAddTask={handleAddTask} />
+                 <AddTaskForm onAddTask={handleAddTask} selectedDate={selectedDate} />
                  <TaskList
                     tasks={tasks}
                     onToggleComplete={handleToggleComplete}
@@ -96,7 +103,7 @@ export default function Home() {
                 <CardTitle className="font-headline">Calendar</CardTitle>
               </CardHeader>
               <CardContent>
-                <CalendarView tasks={tasks} />
+                <CalendarView tasks={tasks} onDateSelect={handleDateSelect} />
               </CardContent>
             </Card>
             <AiSuggester onAddTask={handleAddTask} />

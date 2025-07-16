@@ -9,11 +9,19 @@ import { cn } from '@/lib/utils';
 
 interface AddTaskFormProps {
   onAddTask: (title: string, dueDate?: Date) => void;
+  selectedDate?: Date;
 }
 
-export function AddTaskForm({ onAddTask }: AddTaskFormProps) {
+export function AddTaskForm({ onAddTask, selectedDate }: AddTaskFormProps) {
   const [title, setTitle] = React.useState('');
   const [dueDate, setDueDate] = React.useState<Date | undefined>();
+
+  React.useEffect(() => {
+    if (selectedDate) {
+      setDueDate(selectedDate);
+    }
+  }, [selectedDate]);
+
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
