@@ -9,33 +9,40 @@ export function useLocalStorage<T>(
   key: string,
   initialValue: T
 ): [T, Dispatch<SetStateAction<T>>] {
-  // Use a ref to store the initial value so it's stable across renders
-  const initialValueRef = useRef(initialValue);
+  const [storedValue, setStoredValue] = useState<T>(initialValue);
+  const [hydrated, setHydrated] = useState(false);
 
-  const [storedValue, setStoredValue] = useState<T>(() => {
-    if (isSsr) {
-      return initialValueRef.current;
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hydrated) {
+      return;
     }
     try {
       const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValueRef.current;
+      if (item) {
+        setStoredValue(JSON.parse(item));
+      }
     } catch (error) {
       console.error(`Error reading localStorage key "${key}":`, error);
-      return initialValueRef.current;
     }
-  });
+  }, [hydrated, key]);
 
   const setValue: Dispatch<SetStateAction<T>> = (value) => {
+    if (isSsr) {
+        return;
+    }
     try {
       const valueToStore = value instanceof Function ? value(storedValue) : value;
       setStoredValue(valueToStore);
-      if (!isSsr) {
-        window.localStorage.setItem(key, JSON.stringify(valueToStore));
-      }
+      window.localStorage.setItem(key, JSON.stringify(valueToStore));
     } catch (error) {
       console.error(`Error setting localStorage key "${key}":`, error);
     }
   };
-
-  return [storedValue, setValue];
+  
+  // Return the initial value until the component has hydrated on the client
+  return [hydrated ? storedValue : initialValue, setValue];
 }
