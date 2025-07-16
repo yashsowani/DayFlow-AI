@@ -38,7 +38,7 @@ export function AddTaskForm({ onAddTask }: AddTaskFormProps) {
                 <Button
                     variant={"outline"}
                     className={cn(
-                        "w-[200px] justify-start text-left font-normal",
+                        "w-[200px] justify-start text-left font-normal bg-white",
                         !dueDate && "text-muted-foreground"
                     )}
                 >
