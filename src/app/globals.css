@@ -83,7 +83,7 @@ body {
     @apply border-border;
   }
   body {
-    background-image: linear-gradient(to bottom right, #FF8C00, #FF0080);
+    background-image: linear-gradient(to bottom right, #343D5E, #757E9A);
     @apply text-foreground;
   }
 }
