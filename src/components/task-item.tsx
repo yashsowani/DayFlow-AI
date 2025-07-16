@@ -1,3 +1,4 @@
+
 import * as React from "react";
 import { format } from "date-fns";
 import {
@@ -27,6 +28,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 interface TaskItemProps {
   task: Task;
@@ -53,6 +55,8 @@ export function TaskItem({
 }: TaskItemProps) {
   const [isEditing, setIsEditing] = React.useState(false);
   const [title, setTitle] = React.useState(task.title);
+  const [isDatePickerOpen, setIsDatePickerOpen] = React.useState(false);
+
 
   const handleUpdate = () => {
     if (title.trim()) {
@@ -73,6 +77,7 @@ export function TaskItem({
 
   const handleDateSelect = (date?: Date) => {
     onSetDueDate(task.id, date);
+    setIsDatePickerOpen(false);
   };
 
   return (
@@ -119,56 +124,58 @@ export function TaskItem({
             )}
           </div>
         </div>
+        
+        <Popover open={isDatePickerOpen} onOpenChange={setIsDatePickerOpen}>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="flex-shrink-0">
+                <MoreHorizontal className="h-4 w-4" />
+                <span className="sr-only">More options</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem onSelect={() => setIsEditing(true)}>
+                <Edit className="mr-2 h-4 w-4" />
+                <span>Edit</span>
+              </DropdownMenuItem>
+              
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>
+                  <Flag className="mr-2 h-4 w-4" />
+                  <span>Set Priority</span>
+                </DropdownMenuSubTrigger>
+                <DropdownMenuSubContent>
+                  {(['high', 'medium', 'low'] as Priority[]).map(p => (
+                    <DropdownMenuItem key={p} onSelect={() => onSetPriority(task.id, p)}>
+                      {priorityConfig[p].label}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="flex-shrink-0">
-              <MoreHorizontal className="h-4 w-4" />
-              <span className="sr-only">More options</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem onSelect={() => setIsEditing(true)}>
-              <Edit className="mr-2 h-4 w-4" />
-              <span>Edit</span>
-            </DropdownMenuItem>
-            
-            <DropdownMenuSub>
-              <DropdownMenuSubTrigger>
-                <Flag className="mr-2 h-4 w-4" />
-                <span>Set Priority</span>
-              </DropdownMenuSubTrigger>
-              <DropdownMenuSubContent>
-                {(['high', 'medium', 'low'] as Priority[]).map(p => (
-                  <DropdownMenuItem key={p} onSelect={() => onSetPriority(task.id, p)}>
-                    {priorityConfig[p].label}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuSubContent>
-            </DropdownMenuSub>
+              <PopoverTrigger asChild>
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  <span>Set Due Date</span>
+                </DropdownMenuItem>
+              </PopoverTrigger>
 
-            <DropdownMenuSub>
-              <DropdownMenuSubTrigger>
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                <span>Set Due Date</span>
-              </DropdownMenuSubTrigger>
-              <DropdownMenuSubContent className="w-auto p-0">
-                 <Calendar
-                  mode="single"
-                  selected={task.dueDate ? new Date(task.dueDate) : undefined}
-                  onSelect={handleDateSelect}
-                  initialFocus
-                />
-              </DropdownMenuSubContent>
-            </DropdownMenuSub>
-
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive" onSelect={() => onDeleteTask(task.id)}>
-              <Trash2 className="mr-2 h-4 w-4" />
-              <span>Delete</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="text-destructive" onSelect={() => onDeleteTask(task.id)}>
+                <Trash2 className="mr-2 h-4 w-4" />
+                <span>Delete</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <PopoverContent className="w-auto p-0" align="end">
+              <Calendar
+                mode="single"
+                selected={task.dueDate ? new Date(task.dueDate) : undefined}
+                onSelect={handleDateSelect}
+                initialFocus
+              />
+          </PopoverContent>
+        </Popover>
       </div>
     </Card>
   );
