@@ -54,10 +54,6 @@ export default function Home() {
   const handleSetPriority = (id: string, priority: Priority) => {
     setTasks(prev => prev.map(task => task.id === id ? {...task, priority} : task));
   }
-
-  const handleSetDueDate = (id: string, dueDate?: Date) => {
-    setTasks(prev => prev.map(task => task.id === id ? {...task, dueDate: dueDate?.toISOString() } : task));
-  }
   
   const handleDateSelect = (date?: Date) => {
     setSelectedDate(date);
@@ -91,7 +87,6 @@ export default function Home() {
                     onDeleteTask={handleDeleteTask}
                     onUpdateTask={handleUpdateTask}
                     onSetPriority={handleSetPriority}
-                    onSetDueDate={handleSetDueDate}
                   />
               </CardContent>
             </Card>

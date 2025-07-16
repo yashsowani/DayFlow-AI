@@ -8,7 +8,6 @@ interface TaskListProps {
   onDeleteTask: (id: string) => void;
   onUpdateTask: (id: string, newTitle: string) => void;
   onSetPriority: (id: string, priority: Priority) => void;
-  onSetDueDate: (id: string, dueDate?: Date) => void;
 }
 
 const priorityOrder: Record<Priority, number> = { high: 0, medium: 1, low: 2 };
