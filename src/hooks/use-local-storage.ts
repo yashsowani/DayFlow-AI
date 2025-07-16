@@ -1,31 +1,35 @@
 "use client";
 
-import { useState, useEffect, Dispatch, SetStateAction } from "react";
+import { useState, useEffect, Dispatch, SetStateAction, useRef } from "react";
+
+// Helper function to check for server-side rendering
+const isSsr = typeof window === "undefined";
 
 export function useLocalStorage<T>(
   key: string,
   initialValue: T
 ): [T, Dispatch<SetStateAction<T>>] {
-  const [storedValue, setStoredValue] = useState<T>(initialValue);
+  // Use a ref to store the initial value so it's stable across renders
+  const initialValueRef = useRef(initialValue);
 
-  useEffect(() => {
-    // This effect runs only on the client, after the initial render.
-    let value: T;
+  const [storedValue, setStoredValue] = useState<T>(() => {
+    if (isSsr) {
+      return initialValueRef.current;
+    }
     try {
       const item = window.localStorage.getItem(key);
-      value = item ? JSON.parse(item) : initialValue;
+      return item ? JSON.parse(item) : initialValueRef.current;
     } catch (error) {
       console.error(`Error reading localStorage key "${key}":`, error);
-      value = initialValue;
+      return initialValueRef.current;
     }
-    setStoredValue(value);
-  }, [key, initialValue]);
+  });
 
   const setValue: Dispatch<SetStateAction<T>> = (value) => {
     try {
       const valueToStore = value instanceof Function ? value(storedValue) : value;
       setStoredValue(valueToStore);
-      if (typeof window !== "undefined") {
+      if (!isSsr) {
         window.localStorage.setItem(key, JSON.stringify(valueToStore));
       }
     } catch (error) {
