@@ -31,7 +31,7 @@ export function CalendarView({ tasks, onDateSelect }: CalendarViewProps) {
         day_selected:
           'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground',
         day_today: "bg-accent text-accent-foreground",
-        "day_today:not([aria-selected])": "bg-accent text-accent-foreground",
+        "day_today[aria-selected=true]": "bg-primary text-primary-foreground",
         modifiers: {
             taskDays: 'bg-primary/20 rounded-full'
         }
