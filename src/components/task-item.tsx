@@ -58,6 +58,8 @@ export function TaskItem({
 }: TaskItemProps) {
   const [isEditing, setIsEditing] = React.useState(false);
   const [title, setTitle] = React.useState(task.title);
+  const [isDatePickerOpen, setIsDatePickerOpen] = React.useState(false);
+
 
   const handleUpdate = () => {
     if (title.trim()) {
@@ -75,6 +77,11 @@ export function TaskItem({
       setIsEditing(false);
     }
   }
+
+  const handleDateSelect = (date?: Date) => {
+    onSetDueDate(task.id, date);
+    setIsDatePickerOpen(false);
+  };
 
   return (
     <Card
@@ -148,18 +155,18 @@ export function TaskItem({
               </DropdownMenuSubContent>
             </DropdownMenuSub>
 
-            <Popover>
+            <Popover open={isDatePickerOpen} onOpenChange={setIsDatePickerOpen}>
               <PopoverTrigger asChild>
-                <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   <span>Set Due Date</span>
-                </div>
+                </DropdownMenuItem>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
                   mode="single"
                   selected={task.dueDate ? new Date(task.dueDate) : undefined}
-                  onSelect={(date) => onSetDueDate(task.id, date ?? undefined)}
+                  onSelect={handleDateSelect}
                   initialFocus
                 />
               </PopoverContent>
