@@ -25,7 +25,7 @@ Follow these instructions to get a copy of the project up and running on your lo
 1.  **Clone the repository**
     If you have this code on your local machine, you can skip this step.
     ```sh
-    git clone <your-repository-url>
+    git clone <repository-url>
     cd <repository-directory>
     ```
 
