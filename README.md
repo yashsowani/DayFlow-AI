@@ -3,7 +3,7 @@
 DayFlow AI is an intelligent task management application built with Next.js and Genkit. It's designed to help you organize your daily tasks, with an AI assistant that provides smart suggestions based on your habits and workload.
 
 
-##Demo
+## Demo
 
 ![DayFlow AI](dayflow-image.png)
 
